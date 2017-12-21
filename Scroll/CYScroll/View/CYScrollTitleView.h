@@ -6,8 +6,7 @@
 //  Copyright © 2017年 cy. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-//@protocol CYScrollReloadRule;
+#import <UIKit/UIKit.h> 
 #import "CYScrollReloadRule.h"
 
 @class CYScrollTitleView, CYScrollConfiguration, CYScrollConfigurationItem;

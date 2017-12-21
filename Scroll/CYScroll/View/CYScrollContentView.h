@@ -7,14 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CYScrollReloadRule.h"
 
-@protocol CYScrollReloadRule;
-
-@class CYScrollContentView, CYScrollConfiguration, CYScrollConfigurationItem;
+@class CYScrollContentView, CYScrollConfiguration, CYScrollConfigurationItem, CYScrollViewController;
 
 typedef void(^CYScrollContentScrollViewDidScrollHandle)(CYScrollContentView *scrollContentView, UIScrollView *scrollView, BOOL manualTrigger);
-
-@class CYScrollViewController;
 
 @interface CYScrollContentView : UIView <CYScrollReloadRule>
 

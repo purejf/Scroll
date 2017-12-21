@@ -15,10 +15,10 @@
 		1813FBC71FE8FC1B00096464 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1813FBC61FE8FC1B00096464 /* main.m */; };
 		1813FBD11FE8FC1B00096464 /* ScrollTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1813FBD01FE8FC1B00096464 /* ScrollTests.m */; };
 		1813FBDC1FE8FC1B00096464 /* ScrollUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1813FBDB1FE8FC1B00096464 /* ScrollUITests.m */; };
-		1813FBEB1FE8FC5E00096464 /* CYScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1813FBEA1FE8FC5E00096464 /* CYScrollViewController.m */; };
-		188E797E1FE9FD0600ADC0A9 /* CYScrollTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E797D1FE9FD0600ADC0A9 /* CYScrollTitleView.m */; };
-		188E79841FEA021500ADC0A9 /* CYScrollConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E79831FEA021500ADC0A9 /* CYScrollConfiguration.m */; };
-		188E79891FEA06A600ADC0A9 /* CYScrollContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E79881FEA06A600ADC0A9 /* CYScrollContentView.m */; };
+		188E79F91FEB912F00ADC0A9 /* CYScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E79EA1FEB912F00ADC0A9 /* CYScrollViewController.m */; };
+		188E79FA1FEB912F00ADC0A9 /* CYScrollConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E79EE1FEB912F00ADC0A9 /* CYScrollConfiguration.m */; };
+		188E79FB1FEB912F00ADC0A9 /* CYScrollContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E79F61FEB912F00ADC0A9 /* CYScrollContentView.m */; };
+		188E79FC1FEB912F00ADC0A9 /* CYScrollTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188E79F81FEB912F00ADC0A9 /* CYScrollTitleView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,19 +55,19 @@
 		1813FBD71FE8FC1B00096464 /* ScrollUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScrollUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1813FBDB1FE8FC1B00096464 /* ScrollUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScrollUITests.m; sourceTree = "<group>"; };
 		1813FBDD1FE8FC1B00096464 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1813FBE91FE8FC5E00096464 /* CYScrollViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYScrollViewController.h; sourceTree = "<group>"; };
-		1813FBEA1FE8FC5E00096464 /* CYScrollViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CYScrollViewController.m; sourceTree = "<group>"; };
-		188E797C1FE9FD0600ADC0A9 /* CYScrollTitleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYScrollTitleView.h; sourceTree = "<group>"; };
-		188E797D1FE9FD0600ADC0A9 /* CYScrollTitleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CYScrollTitleView.m; sourceTree = "<group>"; };
-		188E79821FEA021500ADC0A9 /* CYScrollConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYScrollConfiguration.h; sourceTree = "<group>"; };
-		188E79831FEA021500ADC0A9 /* CYScrollConfiguration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CYScrollConfiguration.m; sourceTree = "<group>"; };
-		188E79851FEA049F00ADC0A9 /* CYScrollViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYScrollViewControllerDelegate.h; sourceTree = "<group>"; };
-		188E79861FEA04AC00ADC0A9 /* CYScrollViewControllerDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYScrollViewControllerDataSource.h; sourceTree = "<group>"; };
-		188E79871FEA06A600ADC0A9 /* CYScrollContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYScrollContentView.h; sourceTree = "<group>"; };
-		188E79881FEA06A600ADC0A9 /* CYScrollContentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CYScrollContentView.m; sourceTree = "<group>"; };
-		188E798D1FEA1B4A00ADC0A9 /* CYScrollConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYScrollConstant.h; sourceTree = "<group>"; };
-		188E798E1FEA387400ADC0A9 /* CYScroll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYScroll.h; sourceTree = "<group>"; };
-		188E79D11FEB5C5400ADC0A9 /* CYScrollReloadRule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYScrollReloadRule.h; sourceTree = "<group>"; };
+		188E79E91FEB912F00ADC0A9 /* CYScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYScrollViewController.h; sourceTree = "<group>"; };
+		188E79EA1FEB912F00ADC0A9 /* CYScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYScrollViewController.m; sourceTree = "<group>"; };
+		188E79EB1FEB912F00ADC0A9 /* CYScroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYScroll.h; sourceTree = "<group>"; };
+		188E79ED1FEB912F00ADC0A9 /* CYScrollConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYScrollConfiguration.h; sourceTree = "<group>"; };
+		188E79EE1FEB912F00ADC0A9 /* CYScrollConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYScrollConfiguration.m; sourceTree = "<group>"; };
+		188E79F01FEB912F00ADC0A9 /* CYScrollConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYScrollConstant.h; sourceTree = "<group>"; };
+		188E79F11FEB912F00ADC0A9 /* CYScrollReloadRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYScrollReloadRule.h; sourceTree = "<group>"; };
+		188E79F21FEB912F00ADC0A9 /* CYScrollViewControllerDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYScrollViewControllerDataSource.h; sourceTree = "<group>"; };
+		188E79F31FEB912F00ADC0A9 /* CYScrollViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYScrollViewControllerDelegate.h; sourceTree = "<group>"; };
+		188E79F51FEB912F00ADC0A9 /* CYScrollContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYScrollContentView.h; sourceTree = "<group>"; };
+		188E79F61FEB912F00ADC0A9 /* CYScrollContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYScrollContentView.m; sourceTree = "<group>"; };
+		188E79F71FEB912F00ADC0A9 /* CYScrollTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYScrollTitleView.h; sourceTree = "<group>"; };
+		188E79F81FEB912F00ADC0A9 /* CYScrollTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYScrollTitleView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,23 +118,11 @@
 		1813FBB61FE8FC1B00096464 /* Scroll */ = {
 			isa = PBXGroup;
 			children = (
+				188E79E71FEB912F00ADC0A9 /* CYScroll */,
 				1813FBB71FE8FC1B00096464 /* AppDelegate.h */,
 				1813FBB81FE8FC1B00096464 /* AppDelegate.m */,
-				188E798E1FEA387400ADC0A9 /* CYScroll.h */,
 				1813FBBA1FE8FC1B00096464 /* ViewController.h */,
 				1813FBBB1FE8FC1B00096464 /* ViewController.m */,
-				188E79D11FEB5C5400ADC0A9 /* CYScrollReloadRule.h */,
-				188E798D1FEA1B4A00ADC0A9 /* CYScrollConstant.h */,
-				188E79851FEA049F00ADC0A9 /* CYScrollViewControllerDelegate.h */,
-				188E79861FEA04AC00ADC0A9 /* CYScrollViewControllerDataSource.h */,
-				188E79821FEA021500ADC0A9 /* CYScrollConfiguration.h */,
-				188E79831FEA021500ADC0A9 /* CYScrollConfiguration.m */,
-				188E797C1FE9FD0600ADC0A9 /* CYScrollTitleView.h */,
-				188E797D1FE9FD0600ADC0A9 /* CYScrollTitleView.m */,
-				188E79871FEA06A600ADC0A9 /* CYScrollContentView.h */,
-				188E79881FEA06A600ADC0A9 /* CYScrollContentView.m */,
-				1813FBE91FE8FC5E00096464 /* CYScrollViewController.h */,
-				1813FBEA1FE8FC5E00096464 /* CYScrollViewController.m */,
 				1813FBBD1FE8FC1B00096464 /* Main.storyboard */,
 				1813FBC01FE8FC1B00096464 /* Assets.xcassets */,
 				1813FBC21FE8FC1B00096464 /* LaunchScreen.storyboard */,
@@ -160,6 +148,58 @@
 				1813FBDD1FE8FC1B00096464 /* Info.plist */,
 			);
 			path = ScrollUITests;
+			sourceTree = "<group>";
+		};
+		188E79E71FEB912F00ADC0A9 /* CYScroll */ = {
+			isa = PBXGroup;
+			children = (
+				188E79EB1FEB912F00ADC0A9 /* CYScroll.h */,
+				188E79E81FEB912F00ADC0A9 /* Controller */,
+				188E79EC1FEB912F00ADC0A9 /* Model */,
+				188E79EF1FEB912F00ADC0A9 /* Other */,
+				188E79F41FEB912F00ADC0A9 /* View */,
+			);
+			path = CYScroll;
+			sourceTree = "<group>";
+		};
+		188E79E81FEB912F00ADC0A9 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				188E79E91FEB912F00ADC0A9 /* CYScrollViewController.h */,
+				188E79EA1FEB912F00ADC0A9 /* CYScrollViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		188E79EC1FEB912F00ADC0A9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				188E79ED1FEB912F00ADC0A9 /* CYScrollConfiguration.h */,
+				188E79EE1FEB912F00ADC0A9 /* CYScrollConfiguration.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		188E79EF1FEB912F00ADC0A9 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				188E79F01FEB912F00ADC0A9 /* CYScrollConstant.h */,
+				188E79F11FEB912F00ADC0A9 /* CYScrollReloadRule.h */,
+				188E79F21FEB912F00ADC0A9 /* CYScrollViewControllerDataSource.h */,
+				188E79F31FEB912F00ADC0A9 /* CYScrollViewControllerDelegate.h */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		188E79F41FEB912F00ADC0A9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				188E79F51FEB912F00ADC0A9 /* CYScrollContentView.h */,
+				188E79F61FEB912F00ADC0A9 /* CYScrollContentView.m */,
+				188E79F71FEB912F00ADC0A9 /* CYScrollTitleView.h */,
+				188E79F81FEB912F00ADC0A9 /* CYScrollTitleView.m */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,13 +335,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				188E79841FEA021500ADC0A9 /* CYScrollConfiguration.m in Sources */,
 				1813FBBC1FE8FC1B00096464 /* ViewController.m in Sources */,
-				1813FBEB1FE8FC5E00096464 /* CYScrollViewController.m in Sources */,
+				188E79F91FEB912F00ADC0A9 /* CYScrollViewController.m in Sources */,
+				188E79FC1FEB912F00ADC0A9 /* CYScrollTitleView.m in Sources */,
 				1813FBC71FE8FC1B00096464 /* main.m in Sources */,
-				188E79891FEA06A600ADC0A9 /* CYScrollContentView.m in Sources */,
-				188E797E1FE9FD0600ADC0A9 /* CYScrollTitleView.m in Sources */,
+				188E79FB1FEB912F00ADC0A9 /* CYScrollContentView.m in Sources */,
 				1813FBB91FE8FC1B00096464 /* AppDelegate.m in Sources */,
+				188E79FA1FEB912F00ADC0A9 /* CYScrollConfiguration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
