@@ -21,7 +21,7 @@ typedef void(^CYScrollTitleDidClickItemHandle)(CYScrollTitleView *titleView, NSI
 
 @property (nonatomic, weak, readonly) UIScrollView *scrollView;
 
-- (void)changeSelectedIndexWithContentViewOffset:(CGPoint)contentViewOffset contentViewWidth:(CGFloat)contentViewWidth;
+- (void)scrollToContentViewOffset:(CGPoint)contentViewOffset contentViewWidth:(CGFloat)contentViewWidth;
 
 - (void)setupConfiguration:(CYScrollConfiguration *)configuration;
 

@@ -114,7 +114,7 @@
     [(CYScrollContentView *)self.contentView setupScrollViewDidScrollHandle:^(CYScrollContentView *scrollContentView, UIScrollView *scrollView, BOOL manualTrigger) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (manualTrigger) { // 如果是手动滑动的content，那么触发此事件
-            [(CYScrollTitleView *)strongSelf->_titleView changeSelectedIndexWithContentViewOffset:scrollView.contentOffset contentViewWidth:scrollView.bounds.size.width];
+            [(CYScrollTitleView *)strongSelf->_titleView scrollToContentViewOffset:scrollView.contentOffset contentViewWidth:scrollView.bounds.size.width];
         }
         if ([strongSelf->_delegate respondsToSelector:@selector(scrollViewController:scrollViewDidScroll:)]) {
             [strongSelf->_delegate scrollViewController:strongSelf scrollViewDidScroll:scrollView];

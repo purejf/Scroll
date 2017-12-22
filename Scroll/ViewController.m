@@ -39,45 +39,16 @@
             controller.view.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
         }
         item.childViewController = controller;
-        item.selectedTitleItemScale = 1.5;
+//        item.selectedTitleItemScale = 1.5;
         [configuration initializeItem:item index:index];
     }
     CYScrollViewController *scroll = [CYScrollViewController scrollViewControllerWithConfiguration:configuration];
     scroll.delegate = self;
     scroll.dataSource = self;
+    
     scroll.view.backgroundColor = [UIColor lightGrayColor];
     [self.navigationController pushViewController:scroll animated:true];
 }
 
-- (NSInteger)numberOfChildViewControllersInScrollViewController:(CYScrollViewController *)scrollViewController {
-    return _titles2.count;
-}
-
-- (CYScrollConfigurationItem *)scrollViewController:(CYScrollViewController *)scrollViewController configurationItemAtIndex:(NSInteger)index {
-    NSString *title = _titles2[index];
-    CYScrollConfigurationItem *item = [CYScrollConfigurationItem new];
-    item.title = title;
-    UIViewController *controller = [UIViewController new];
-    controller.view.backgroundColor = [UIColor whiteColor];
-    UILabel *titleL = [UILabel new];
-    titleL.text = title;
-    int R = (arc4random() % 256) ;
-    int G = (arc4random() % 256) ;
-    int B = (arc4random() % 256) ;
-    controller.view.backgroundColor = [UIColor whiteColor];
-    titleL.textAlignment = NSTextAlignmentCenter;
-    titleL.font = [UIFont systemFontOfSize:30];
-    [titleL setTextColor:[UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:1]];
-    [controller.view addSubview:titleL];
-    titleL.frame = controller.view.bounds;
-    
-    item.selectedTitleItemScale = 1.5;
-    item.childViewController = controller;
-    return item;
-}
-
-- (CGFloat)titleViewHeightForScrollViewController:(CYScrollViewController *)scrollViewController {
-    return 44;
-}
 
 @end

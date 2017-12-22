@@ -12,6 +12,13 @@
     NSMutableArray *_items;
 }
 
+- (CYScrollConfigurationCommonItem *)commonItem {
+    if (!_commonItem) {
+        _commonItem = [CYScrollConfigurationCommonItem new];
+    }
+    return _commonItem;
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
@@ -57,49 +64,81 @@
 
 @end
 
+@implementation CYScrollConfigurationCommonItem
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _titleTextColor = [UIColor blackColor];
+        _titleTextFont = [UIFont systemFontOfSize:12];
+        _selectedTitleItemScale = 1.2;
+        _selectedTitleTextColor = [UIColor redColor];
+        _titleItemPadding = UIEdgeInsetsMake(5, 5, 5, 5);
+        _titleItemLeftMargin = 5.0;
+        _titleItemRightMargin = 5.0;
+        _titleItemBackgroundColor = [UIColor clearColor];
+        _selectedTitleItemBackgroundColor = [UIColor whiteColor];
+        _titleItemLayerCornerRadius = 10.0;
+        _showLine = true;
+        _lineColor = [UIColor orangeColor];
+        _lineHeight = 8.0;
+        _lineBottomMargin = 2.0;
+        _lineMoveWithAnimation = true;
+        _lineMoveAnimationInterval = 0.3;
+        _lineStretchingAnimation = true;
+    }
+    return self;
+}
+
+@end
+
+@interface CYScrollConfigurationItem ()
+
+@property (nonatomic, strong) CYScrollConfigurationCommonItem *commonItem;
+
+@end
+
 @implementation CYScrollConfigurationItem
+
++ (instancetype)itemWithCommonItem:(CYScrollConfigurationCommonItem *)commonItem {
+    CYScrollConfigurationItem *item = [CYScrollConfigurationItem new];
+    item.commonItem = commonItem;
+    return item;
+}
+
+- (CYScrollConfigurationCommonItem *)commonItem {
+    if (!_commonItem) {
+        _commonItem = [CYScrollConfigurationCommonItem new];
+    }
+    return _commonItem;
+}
 
 #pragma mark - Get
 
 - (CGFloat)titleItemWidth {
     if (!_titleItemWidth) {
         NSString *title = self.title;
-        CGFloat titleItemScale = self.selectedTitleItemScale;
-        UIFont *titleTextFont = self.titleTextFont;
+        UIFont *titleTextFont = self.commonItem.titleTextFont;
         if (title && titleTextFont) {
             NSDictionary *attributes = @{NSFontAttributeName: titleTextFont};
-            _titleItemWidth = [title boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size.width * titleItemScale + 10;
+            _titleItemWidth = [title boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size.width;
+            _titleItemWidth += (self.commonItem.titleItemPadding.left + self.commonItem.titleItemPadding.right);
         }
     }
     return _titleItemWidth;
 }
 
-- (UIColor *)titleTextColor {
-    if (!_titleTextColor) {
-        _titleTextColor = [UIColor blackColor];
+- (CGFloat)titleItemHeight {
+    if (!_titleItemHeight) {
+        NSString *title = self.title;
+        UIFont *titleTextFont = self.commonItem.titleTextFont;
+        if (title && titleTextFont) {
+            NSDictionary *attributes = @{NSFontAttributeName: titleTextFont};
+            _titleItemHeight = [title boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size.height;
+            _titleItemHeight += (self.commonItem.titleItemPadding.top + self.commonItem.titleItemPadding.bottom);
+        }
     }
-    return _titleTextColor;
-}
-
-- (UIFont *)titleTextFont {
-    if (!_titleTextFont) {
-        _titleTextFont = [UIFont systemFontOfSize:12];
-    }
-    return _titleTextFont;
-}
-
-- (UIColor *)selectedTitleTextColor {
-    if (!_selectedTitleTextColor) {
-        _selectedTitleTextColor = [UIColor redColor];
-    }
-    return _selectedTitleTextColor;
-}
-
-- (CGFloat)selectedTitleItemScale {
-    if (!_selectedTitleItemScale) {
-        _selectedTitleItemScale = 1.2;
-    }
-    return _selectedTitleItemScale;
+    return _titleItemHeight;
 }
 
 @end

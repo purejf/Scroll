@@ -10,7 +10,7 @@
 #import "CYScrollConstant.h"
 #import "CYScrollReloadRule.h"
 
-@class CYScrollConfigurationItem;
+@class CYScrollConfigurationItem, CYScrollConfigurationCommonItem;
 
 @interface CYScrollConfiguration : NSObject <CYScrollReloadRule>
 
@@ -22,15 +22,41 @@
 
 @property (nonatomic, assign) CGFloat titleContentMargin;
 
+@property (nonatomic, strong) CYScrollConfigurationCommonItem *commonItem;
+
 - (void)initializeItem:(CYScrollConfigurationItem *)item index:(NSInteger)index;
 
 - (CYScrollConfigurationItem *)itemAtIndex:(NSInteger)index;
 
 @end
 
-@interface CYScrollConfigurationItem : NSObject
+@interface CYScrollConfigurationCommonItem : NSObject
 
-@property (nonatomic, assign) CGFloat titleItemWidth;
+@property (nonatomic, assign) bool showLine;
+
+@property (nonatomic, assign) bool lineStretchingAnimation;
+
+@property (nonatomic, assign) bool lineMoveWithAnimation;
+
+@property (nonatomic, assign) CGFloat lineMoveAnimationInterval;
+
+@property (nonatomic, strong) UIColor *lineColor;
+
+@property (nonatomic, assign) CGFloat lineHeight;
+
+@property (nonatomic, assign) CGFloat lineBottomMargin;
+
+@property (nonatomic, assign) CGFloat titleItemLayerCornerRadius;
+
+@property (nonatomic, strong) UIColor *titleItemLayerBorderColor;
+
+@property (nonatomic, assign) CGFloat titleItemLayerBorderWidth;
+
+@property (nonatomic, assign) UIEdgeInsets titleItemPadding;
+
+@property (nonatomic, assign) CGFloat titleItemLeftMargin;
+
+@property (nonatomic, assign) CGFloat titleItemRightMargin;
 
 @property (nonatomic, strong) UIColor *titleTextColor;
 
@@ -40,10 +66,26 @@
 
 @property (nonatomic, assign) CGFloat selectedTitleItemScale;
 
+@property (nonatomic, strong) UIColor *titleItemBackgroundColor;
+
+@property (nonatomic, strong) UIColor *selectedTitleItemBackgroundColor;
+
+@end
+
+@interface CYScrollConfigurationItem : NSObject
+
+@property (nonatomic, strong, readonly) CYScrollConfigurationCommonItem *commonItem;
+
+@property (nonatomic, assign) CGFloat titleItemWidth;
+
+@property (nonatomic, assign) CGFloat titleItemHeight;
+
 @property (nonatomic, strong) UIViewController *childViewController;
 
 @property (nonatomic, copy) NSString *title;
 
 @property (nonatomic, assign) UIEdgeInsets contentInsets;
+
++ (instancetype)itemWithCommonItem:(CYScrollConfigurationCommonItem *)commonItem;
 
 @end
