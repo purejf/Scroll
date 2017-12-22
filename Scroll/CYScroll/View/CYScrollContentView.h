@@ -13,6 +13,8 @@
 
 typedef void(^CYScrollContentScrollViewDidScrollHandle)(CYScrollContentView *scrollContentView, UIScrollView *scrollView, BOOL manualTrigger);
 
+typedef void(^CYScrollContentScrollViewDidEndScrollingAnimationHandle)(CYScrollContentView *scrollContentView, UIScrollView *scrollView);
+
 @interface CYScrollContentView : UIView <CYScrollReloadRule>
 
 @property (nonatomic, assign, readonly) NSInteger selectedIndex;
@@ -28,5 +30,7 @@ typedef void(^CYScrollContentScrollViewDidScrollHandle)(CYScrollContentView *scr
 - (void)setupConfiguration:(CYScrollConfiguration *)configuration parentViewController:(UIViewController *)parentViewController;
 
 - (void)setupScrollViewDidScrollHandle:(CYScrollContentScrollViewDidScrollHandle)scrollViewDidScrollHandle;
+
+- (void)setupScrollViewDidEndScrollingAnimationHandle:(CYScrollContentScrollViewDidEndScrollingAnimationHandle)endScrollingAnimationHandle;
 
 @end

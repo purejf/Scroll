@@ -87,6 +87,7 @@
         _lineMoveAnimationInterval = 0.3;
         _lineStretchingAnimation = true;
         _titleItemWidthAccordingToContentSize = true;
+        _gradient = true;
     }
     return self;
 }

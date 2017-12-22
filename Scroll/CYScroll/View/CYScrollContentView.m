@@ -65,6 +65,7 @@ static NSString *const kCellId = @"kCYScrollContentViewCellId";
 
 @implementation CYScrollContentView {
     CYScrollContentScrollViewDidScrollHandle _scrollViewDidScrollHandle;
+    CYScrollContentScrollViewDidEndScrollingAnimationHandle _endScrollingAnimationHandle;
     // 手动触发
     BOOL _manualTrigger;
 }
@@ -102,6 +103,10 @@ static NSString *const kCellId = @"kCYScrollContentViewCellId";
 
 - (void)setupScrollViewDidScrollHandle:(CYScrollContentScrollViewDidScrollHandle)scrollViewDidScrollHandle {    
     _scrollViewDidScrollHandle = scrollViewDidScrollHandle;
+}
+
+- (void)setupScrollViewDidEndScrollingAnimationHandle:(CYScrollContentScrollViewDidEndScrollingAnimationHandle)endScrollingAnimationHandle {
+    _endScrollingAnimationHandle = endScrollingAnimationHandle;
 }
 
 - (void)layoutSubviews {

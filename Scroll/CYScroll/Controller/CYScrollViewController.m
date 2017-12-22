@@ -103,9 +103,6 @@
     [(CYScrollTitleView *)self.titleView setupDidClickItemHandle:^(CYScrollTitleView *titleView, NSInteger selectedIndex) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf->_contentView scrollToSelectedIndex:selectedIndex];
-        if ([strongSelf->_delegate respondsToSelector:@selector(scrollViewController:didSelectedTitleItemAtIndex:)]) {
-            [strongSelf->_delegate scrollViewController:strongSelf didSelectedTitleItemAtIndex:selectedIndex];
-        }
     }];
 }
 
@@ -118,6 +115,13 @@
         }
         if ([strongSelf->_delegate respondsToSelector:@selector(scrollViewController:scrollViewDidScroll:)]) {
             [strongSelf->_delegate scrollViewController:strongSelf scrollViewDidScroll:scrollView];
+        }
+    }];
+    [(CYScrollContentView *)self.contentView setupScrollViewDidEndScrollingAnimationHandle:^(CYScrollContentView *scrollContentView, UIScrollView *scrollView) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        NSInteger index = scrollView.contentOffset.x / scrollView.frame.size.width;
+        if ([strongSelf->_delegate respondsToSelector:@selector(scrollViewController:scrollViewDidEndScrollingAnimation:index:)]) {
+            [strongSelf->_delegate scrollViewController:strongSelf scrollViewDidEndScrollingAnimation:scrollView index:index];
         }
     }];
 }

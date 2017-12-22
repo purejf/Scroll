@@ -16,6 +16,8 @@
 
 @property (nonatomic, assign, readonly) BOOL selected;
 
+@property (nonatomic, strong) UIColor *gradientColor;
+
 - (void)setupSelected:(BOOL)selected;
 
 @end
@@ -29,6 +31,11 @@
 @end
 
 @implementation CYScrollTitleItemView
+
+- (void)setGradientColor:(UIColor *)gradientColor {
+    _gradientColor = gradientColor;
+    self.titleL.textColor = gradientColor;
+}
 
 - (void)setItem:(CYScrollConfigurationItem *)item {
     _item = item;
@@ -77,7 +84,9 @@
 
 @end
 
-@interface CYScrollTitleView ()
+@interface CYScrollTitleView () {
+//    NSMutableArray *_colorComponents;
+}
 
 @property (nonatomic, weak) UIView *lineV;
 
@@ -106,6 +115,56 @@
 }
 
 #pragma mark - Set
+//
+//- (void)itemAnimationWithContentViewOffset:(CGPoint)contentViewOffset contentViewWidth:(CGFloat)contentViewWidth {
+//    if (!_configuration.commonItem.gradient) return;
+//    NSInteger selectedIndex = contentViewOffset.x / contentViewWidth;
+//    if (selectedIndex < 0 || selectedIndex >= self.scrollView.subviews.count - 1) return;
+//    if (_configuration.commonItem.gradient) {
+//        if (!_colorComponents) {
+//            _colorComponents = [NSMutableArray new];
+//            [self setupComponentsWithColor:_configuration.commonItem.titleTextColor begin:true];
+//            [self setupComponentsWithColor:_configuration.commonItem.selectedTitleTextColor begin:false];
+//        }
+//    }
+//
+//    BOOL isScrollToRight = contentViewOffset.x - selectedIndex * contentViewWidth;
+//
+//    CYScrollTitleItemView *selectedItemView = self.scrollView.subviews[selectedIndex];
+//    CGFloat delta = contentViewOffset.x - contentViewWidth * selectedIndex;
+//    if (delta > 0) {
+//        CGFloat division = delta / contentViewWidth;
+//        //    CYScrollConfigurationItem *currentItem = [_configuration itemAtIndex:selectedIndex];
+//        CYScrollTitleItemView *currentView = selectedItemView;
+//        //    CYScrollConfigurationItem *nextItem = [_configuration itemAtIndex:selectedIndex + 1];
+//        CYScrollTitleItemView *nextView = self.scrollView.subviews[selectedIndex + 1];
+//        if (_colorComponents.count == 6) {
+//            //        CGFloat startR = [_colorComponents[0] floatValue];
+//            //        CGFloat startG = [_colorComponents[1] floatValue];
+//            //        CGFloat startB = [_colorComponents[2] floatValue];
+//            //        CGFloat endR = [_colorComponents[3] floatValue];
+//            //        CGFloat endG = [_colorComponents[4] floatValue];
+//            //        CGFloat endB = [_colorComponents[5] floatValue];
+//            //        CGFloat r = endR - startR;
+//            //        CGFloat g = endG - startG;
+//            //        CGFloat b = endB - startB;
+//            //        CGFloat left = division;
+//            //        CGFloat right = 1 - left;
+//            //        UIColor *rightColor = [UIColor colorWithRed:startR + r * right green:startG + g * right blue:startB + b * right alpha:1];
+//            //        UIColor *leftColor = [UIColor colorWithRed:startR + r * left green:startG + g * left  blue:startB + b * left alpha:1];
+//            if (isScrollToRight) {
+//                currentView.gradientColor = [UIColor blackColor];
+//                nextView.gradientColor = [UIColor redColor];
+//            } else {
+//                if (selectedIndex >= 1) {
+//                    CYScrollTitleItemView *preView = self.scrollView.subviews[selectedIndex + 1];
+//                    preView.gradientColor = [UIColor blackColor];
+//                    currentView.gradientColor = [UIColor redColor];
+//                }
+//            }
+//        }
+//    }
+//}
 
 - (void)lineStrectingAnimationWithContentViewOffset:(CGPoint)contentViewOffset contentViewWidth:(CGFloat)contentViewWidth {
     if (!_configuration.commonItem.lineStretchingAnimation) return;
@@ -162,6 +221,7 @@
 - (void)scrollToContentViewOffset:(CGPoint)contentViewOffset contentViewWidth:(CGFloat)contentViewWidth {
     _reloadLine = false;
     [self lineStrectingAnimationWithContentViewOffset:contentViewOffset contentViewWidth:contentViewWidth];
+//    [self itemAnimationWithContentViewOffset:contentViewOffset contentViewWidth:contentViewWidth];
     NSInteger selectedIndex = (contentViewOffset.x + self.scrollView.bounds.size.width / 2.0) / contentViewWidth;
     [self toSelectedIndex:selectedIndex click:false];
 }
@@ -189,17 +249,17 @@
     }
     [self.scrollView setContentOffset:CGPointMake(offsetX, 0) animated:true];
     if (click) {
-    if (_configuration.commonItem.lineMoveWithAnimation && _configuration.commonItem.lineMoveAnimationInterval) {
-        [UIView animateWithDuration:_configuration.commonItem.lineMoveAnimationInterval animations:^{
+        if (_configuration.commonItem.lineMoveWithAnimation && _configuration.commonItem.lineMoveAnimationInterval) {
+            [UIView animateWithDuration:_configuration.commonItem.lineMoveAnimationInterval animations:^{
+                CGPoint lineCenter = self.lineV.center;
+                lineCenter.x = selectedItemView.center.x;
+                self.lineV.center = lineCenter;
+            }];
+        } else {
             CGPoint lineCenter = self.lineV.center;
             lineCenter.x = selectedItemView.center.x;
             self.lineV.center = lineCenter;
-        }];
-    } else {
-        CGPoint lineCenter = self.lineV.center;
-        lineCenter.x = selectedItemView.center.x;
-        self.lineV.center = lineCenter;
-    }
+        }
     }
 }
 
@@ -336,6 +396,23 @@
         }
     }
     self.scrollView.contentSize = CGSizeMake(titleItemViewX, self.scrollView.bounds.size.height);
+}
+
+- (void)setupComponentsWithColor:(UIColor *)color begin:(BOOL)begin {
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    unsigned char resultingPixel[4];
+    CGContextRef context = CGBitmapContextCreate(&resultingPixel, 1, 1, 8, 4, rgbColorSpace, 1);
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, CGRectMake(0, 0, 1, 1));
+    CGContextRelease(context);
+    CGColorSpaceRelease(rgbColorSpace);
+    for (int component = 0; component < 3; component++) {
+//        if (begin) {
+//            _colorComponents[component] = @(resultingPixel[component] / 255.0f);
+//        } else {
+//            _colorComponents[component + 3] = @(resultingPixel[component] / 255.0f);
+//        }
+    }
 }
 
 #pragma mark - Lazy Load

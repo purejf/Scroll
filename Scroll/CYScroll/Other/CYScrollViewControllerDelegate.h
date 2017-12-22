@@ -12,8 +12,8 @@
 
 @protocol CYScrollViewControllerDelegate <NSObject>
 
-- (void)scrollViewController:(CYScrollViewController *)scrollViewController didSelectedTitleItemAtIndex:(NSInteger)index;
-
 - (void)scrollViewController:(CYScrollViewController *)scrollViewController scrollViewDidScroll:(UIScrollView *)scrollView;
+
+- (NSInteger)scrollViewController:(CYScrollViewController *)scrollViewController scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView index:(NSInteger)index;
 
 @end
