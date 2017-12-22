@@ -14,6 +14,6 @@
 
 - (void)scrollViewController:(CYScrollViewController *)scrollViewController scrollViewDidScroll:(UIScrollView *)scrollView;
 
-- (NSInteger)scrollViewController:(CYScrollViewController *)scrollViewController scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView index:(NSInteger)index;
+- (void)scrollViewController:(CYScrollViewController *)scrollViewController scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView index:(NSInteger)index;
 
 @end

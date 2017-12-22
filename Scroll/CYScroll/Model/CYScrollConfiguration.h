@@ -32,6 +32,8 @@
 
 @interface CYScrollConfigurationCommonItem : NSObject
 
+@property (nonatomic, assign) BOOL scrollFill;
+
 @property (nonatomic, assign) BOOL gradient;
 
 @property (nonatomic, assign) bool showLine;

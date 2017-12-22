@@ -126,6 +126,7 @@ static NSString *const kCellId = @"kCYScrollContentViewCellId";
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
      _manualTrigger = true;
+    !_endScrollingAnimationHandle ?: _endScrollingAnimationHandle(self, scrollView);
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {

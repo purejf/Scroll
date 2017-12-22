@@ -69,18 +69,18 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _titleTextColor = [UIColor blackColor];
-        _titleTextFont = [UIFont systemFontOfSize:12];
+        _titleTextColor = [UIColor whiteColor];
+        _titleTextFont = [UIFont systemFontOfSize:14];
         _selectedTitleItemScale = 1.0;
         _selectedTitleTextColor = [UIColor redColor];
-        _titleItemPadding = UIEdgeInsetsMake(5, 5, 5, 5);
-        _titleItemLeftMargin = 5.0;
-        _titleItemRightMargin = 5.0;
+        _titleItemPadding = UIEdgeInsetsMake(5, 10, 5, 10);
+        _titleItemLeftMargin = 0.0;
+        _titleItemRightMargin = 0.0;
         _titleItemBackgroundColor = [UIColor whiteColor];
         _selectedTitleItemBackgroundColor = [UIColor whiteColor];
         _titleItemLayerCornerRadius = 10.0;
         _showLine = true;
-        _lineColor = [UIColor orangeColor];
+        _lineColor = [UIColor redColor];
         _lineHeight = 4.0;
         _lineBottomMargin = 2.0;
         _lineMoveWithAnimation = true;
@@ -88,6 +88,7 @@
         _lineStretchingAnimation = true;
         _titleItemWidthAccordingToContentSize = true;
         _gradient = true;
+        _scrollFill = true;
     }
     return self;
 }

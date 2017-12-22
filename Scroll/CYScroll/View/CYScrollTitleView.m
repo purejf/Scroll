@@ -10,31 +10,63 @@
 #import "CYScrollConfiguration.h"
 #import "CYScrollReloadRule.h"
 
+@interface CYScrollTitleItemLabel : UILabel
+
+@property (nonatomic, assign) CGFloat progress;
+
+@property (nonatomic, strong) UIColor *fillColor;
+
+@end
+
+@implementation CYScrollTitleItemLabel
+
+- (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    if (!_fillColor) return;
+    [_fillColor set];
+    
+    CGRect newRect = rect;
+    newRect.size.width = rect.size.width * self.progress;
+    UIRectFillUsingBlendMode(newRect, kCGBlendModeSourceIn);
+}
+
+- (void)setProgress:(CGFloat)progress {
+    _progress = progress;
+    [self setNeedsDisplay];
+}
+
+@end
+
 @interface CYScrollTitleItemView : UIView
 
 @property (nonatomic, strong) CYScrollConfigurationItem *item;
 
-@property (nonatomic, assign, readonly) BOOL selected;
+@property (nonatomic, assign) BOOL selected;
 
-@property (nonatomic, strong) UIColor *gradientColor;
+@property (nonatomic, assign) CGFloat progress;
 
-- (void)setupSelected:(BOOL)selected;
+@property (nonatomic, strong) UIColor *fillColor;
 
 @end
 
 @interface CYScrollTitleItemView ()
 
-@property (nonatomic, weak) UILabel *titleL;
-
-@property (nonatomic, assign) BOOL selected;
+@property (nonatomic, weak) CYScrollTitleItemLabel *titleL;
 
 @end
 
 @implementation CYScrollTitleItemView
 
-- (void)setGradientColor:(UIColor *)gradientColor {
-    _gradientColor = gradientColor;
-    self.titleL.textColor = gradientColor;
+- (void)setProgress:(CGFloat)progress {
+    _progress = progress;
+    if (self.item.commonItem.scrollFill) {
+        self.titleL.progress = progress;
+    }
+}
+
+- (void)setFillColor:(UIColor *)fillColor {
+    _fillColor = fillColor;
+    self.titleL.fillColor = fillColor;
 }
 
 - (void)setItem:(CYScrollConfigurationItem *)item {
@@ -55,10 +87,14 @@
 
 #pragma mark - Set
 
-- (void)setupSelected:(BOOL)selected {
+- (void)setSelected:(BOOL)selected {
     _selected = selected;
     self.titleL.textColor = selected ? self.item.commonItem.selectedTitleTextColor : self.item.commonItem.titleTextColor;
-    self.titleL.backgroundColor = selected ? self.item.commonItem.selectedTitleItemBackgroundColor : self.item.commonItem.titleItemBackgroundColor;
+    if (!self.item.commonItem.scrollFill) {
+        self.titleL.backgroundColor = selected ? self.item.commonItem.selectedTitleItemBackgroundColor : self.item.commonItem.titleItemBackgroundColor;
+    } else {
+        self.titleL.backgroundColor = [UIColor clearColor];
+    }
     CGFloat scale = selected ? self.item.commonItem.selectedTitleItemScale : 1.0;
     [UIView animateWithDuration:0.3 animations:^{
         self.titleL.transform = CGAffineTransformMakeScale(scale, scale);
@@ -72,9 +108,9 @@
 
 #pragma mark - Lazy Load
 
-- (UILabel *)titleL {
+- (CYScrollTitleItemLabel *)titleL {
     if (!_titleL) {
-        UILabel *titleL = [UILabel new];
+        CYScrollTitleItemLabel *titleL = [CYScrollTitleItemLabel new];
         [self addSubview:titleL];
         _titleL = titleL;
         titleL.textAlignment = NSTextAlignmentCenter;
@@ -84,9 +120,9 @@
 
 @end
 
-@interface CYScrollTitleView () {
-//    NSMutableArray *_colorComponents;
-}
+@interface CYScrollTitleView ()
+
+@property (nonatomic, strong) NSMutableArray *subviews;
 
 @property (nonatomic, weak) UIView *lineV;
 
@@ -108,75 +144,25 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        _selectedIndex = -1;
         self.backgroundColor = [UIColor whiteColor];
+        _subviews = [NSMutableArray new];
     }
     return self;
 }
 
 #pragma mark - Set
-//
-//- (void)itemAnimationWithContentViewOffset:(CGPoint)contentViewOffset contentViewWidth:(CGFloat)contentViewWidth {
-//    if (!_configuration.commonItem.gradient) return;
-//    NSInteger selectedIndex = contentViewOffset.x / contentViewWidth;
-//    if (selectedIndex < 0 || selectedIndex >= self.scrollView.subviews.count - 1) return;
-//    if (_configuration.commonItem.gradient) {
-//        if (!_colorComponents) {
-//            _colorComponents = [NSMutableArray new];
-//            [self setupComponentsWithColor:_configuration.commonItem.titleTextColor begin:true];
-//            [self setupComponentsWithColor:_configuration.commonItem.selectedTitleTextColor begin:false];
-//        }
-//    }
-//
-//    BOOL isScrollToRight = contentViewOffset.x - selectedIndex * contentViewWidth;
-//
-//    CYScrollTitleItemView *selectedItemView = self.scrollView.subviews[selectedIndex];
-//    CGFloat delta = contentViewOffset.x - contentViewWidth * selectedIndex;
-//    if (delta > 0) {
-//        CGFloat division = delta / contentViewWidth;
-//        //    CYScrollConfigurationItem *currentItem = [_configuration itemAtIndex:selectedIndex];
-//        CYScrollTitleItemView *currentView = selectedItemView;
-//        //    CYScrollConfigurationItem *nextItem = [_configuration itemAtIndex:selectedIndex + 1];
-//        CYScrollTitleItemView *nextView = self.scrollView.subviews[selectedIndex + 1];
-//        if (_colorComponents.count == 6) {
-//            //        CGFloat startR = [_colorComponents[0] floatValue];
-//            //        CGFloat startG = [_colorComponents[1] floatValue];
-//            //        CGFloat startB = [_colorComponents[2] floatValue];
-//            //        CGFloat endR = [_colorComponents[3] floatValue];
-//            //        CGFloat endG = [_colorComponents[4] floatValue];
-//            //        CGFloat endB = [_colorComponents[5] floatValue];
-//            //        CGFloat r = endR - startR;
-//            //        CGFloat g = endG - startG;
-//            //        CGFloat b = endB - startB;
-//            //        CGFloat left = division;
-//            //        CGFloat right = 1 - left;
-//            //        UIColor *rightColor = [UIColor colorWithRed:startR + r * right green:startG + g * right blue:startB + b * right alpha:1];
-//            //        UIColor *leftColor = [UIColor colorWithRed:startR + r * left green:startG + g * left  blue:startB + b * left alpha:1];
-//            if (isScrollToRight) {
-//                currentView.gradientColor = [UIColor blackColor];
-//                nextView.gradientColor = [UIColor redColor];
-//            } else {
-//                if (selectedIndex >= 1) {
-//                    CYScrollTitleItemView *preView = self.scrollView.subviews[selectedIndex + 1];
-//                    preView.gradientColor = [UIColor blackColor];
-//                    currentView.gradientColor = [UIColor redColor];
-//                }
-//            }
-//        }
-//    }
-//}
 
 - (void)lineStrectingAnimationWithContentViewOffset:(CGPoint)contentViewOffset contentViewWidth:(CGFloat)contentViewWidth {
     if (!_configuration.commonItem.lineStretchingAnimation) return;
     NSInteger selectedIndex = contentViewOffset.x / contentViewWidth;
-    if (selectedIndex < 0 || selectedIndex >= self.scrollView.subviews.count - 1) return;
-    CYScrollTitleItemView *selectedItemView = self.scrollView.subviews[selectedIndex];
+    if (selectedIndex < 0 || selectedIndex >= _subviews.count - 1) return;
+    CYScrollTitleItemView *selectedItemView = _subviews[selectedIndex];
     CGFloat delta = contentViewOffset.x - contentViewWidth * selectedIndex;
     CGFloat division = delta / contentViewWidth;
     CYScrollConfigurationItem *currentItem = [_configuration itemAtIndex:selectedIndex];
     CYScrollTitleItemView *currentView = selectedItemView;
     CYScrollConfigurationItem *nextItem = [_configuration itemAtIndex:selectedIndex + 1];
-    CYScrollTitleItemView *nextView = self.scrollView.subviews[selectedIndex + 1];
+    CYScrollTitleItemView *nextView = _subviews[selectedIndex + 1];
     CGFloat maxLineW = (nextView.frame.origin.x + nextView.frame.size.width) - (currentView.frame.origin.x);
     if (_configuration.commonItem.titleItemWidthAccordingToContentSize) {
         maxLineW -= (_configuration.commonItem.titleItemPadding.left + _configuration.commonItem.titleItemPadding.right);
@@ -221,18 +207,33 @@
 - (void)scrollToContentViewOffset:(CGPoint)contentViewOffset contentViewWidth:(CGFloat)contentViewWidth {
     _reloadLine = false;
     [self lineStrectingAnimationWithContentViewOffset:contentViewOffset contentViewWidth:contentViewWidth];
-//    [self itemAnimationWithContentViewOffset:contentViewOffset contentViewWidth:contentViewWidth];
-    NSInteger selectedIndex = (contentViewOffset.x + self.scrollView.bounds.size.width / 2.0) / contentViewWidth;
+    [self scrollFillWithContentViewOffset:contentViewOffset contentViewWidth:contentViewWidth];
+    NSInteger selectedIndex = contentViewOffset.x / contentViewWidth;
     [self toSelectedIndex:selectedIndex click:false];
+}
+
+- (void)scrollFillWithContentViewOffset:(CGPoint)contentViewOffset contentViewWidth:(CGFloat)contentViewWidth {
+    if (!_configuration.commonItem.scrollFill) return;
+    NSInteger selectedIndex = contentViewOffset.x / contentViewWidth;
+    if (selectedIndex < 0 || selectedIndex >= _subviews.count - 1) return;
+    CYScrollTitleItemView *selectedItemView = _subviews[selectedIndex];
+    CGFloat delta = contentViewOffset.x - contentViewWidth * selectedIndex;
+    CGFloat division = delta / contentViewWidth;
+    CYScrollTitleItemView *currentView = selectedItemView;
+    CYScrollTitleItemView *nextView = _subviews[selectedIndex + 1];
+    currentView.fillColor = _configuration.commonItem.titleTextColor;
+    nextView.fillColor = _configuration.commonItem.selectedTitleTextColor;
+    currentView.progress = division;
+    nextView.progress = division;
 }
 
 - (void)toSelectedIndex:(NSInteger)selectedIndex click:(BOOL)click {
     if (_selectedIndex == selectedIndex) return;
-    if (selectedIndex >= _configuration.numberOfChildViewControllers || selectedIndex >= self.scrollView.subviews.count) return;
+    if (selectedIndex >= _configuration.numberOfChildViewControllers || selectedIndex >= _subviews.count) return;
     _selectedIndex = selectedIndex;
-    CYScrollTitleItemView *selectedItemView = self.scrollView.subviews[selectedIndex];
-    [self.selectedItemView setupSelected:false];
-    [selectedItemView setupSelected:true];
+    CYScrollTitleItemView *selectedItemView = _subviews[selectedIndex];
+    self.selectedItemView.selected = false;
+    selectedItemView.selected = true;
     self.selectedItemView = selectedItemView;
     CGFloat centerX = selectedItemView.center.x;
     CGFloat max = self.scrollView.contentSize.width - self.scrollView.bounds.size.width;
@@ -249,16 +250,24 @@
     }
     [self.scrollView setContentOffset:CGPointMake(offsetX, 0) animated:true];
     if (click) {
-        if (_configuration.commonItem.lineMoveWithAnimation && _configuration.commonItem.lineMoveAnimationInterval) {
-            [UIView animateWithDuration:_configuration.commonItem.lineMoveAnimationInterval animations:^{
-                CGPoint lineCenter = self.lineV.center;
-                lineCenter.x = selectedItemView.center.x;
-                self.lineV.center = lineCenter;
-            }];
-        } else {
+        void(^block)() = ^() {
+            CGRect lineFrame = self.lineV.frame;
+            CYScrollConfigurationItem *item = [_configuration itemAtIndex:selectedIndex];
+            if (_configuration.commonItem.titleItemWidthAccordingToContentSize) {
+                lineFrame.size.width = item.titleItemWidth;
+            } else {
+                lineFrame.size.width = selectedItemView.frame.size.width;
+            }
+            self.lineV.frame = lineFrame;
             CGPoint lineCenter = self.lineV.center;
             lineCenter.x = selectedItemView.center.x;
             self.lineV.center = lineCenter;
+        };
+        
+        if (_configuration.commonItem.lineMoveWithAnimation && _configuration.commonItem.lineMoveAnimationInterval) {
+            [UIView animateWithDuration:_configuration.commonItem.lineMoveAnimationInterval animations:block];
+        } else {
+            block();
         }
     }
 }
@@ -269,21 +278,14 @@
 
 - (void)setupConfiguration:(CYScrollConfiguration *)configuration {
     _configuration = configuration;
-    [self reloadWithSelectedIndex:0];
-}
-
-- (void)setupDidClickItemHandle:(CYScrollTitleDidClickItemHandle)didClickItemHandle {
-    _didClickItemHandle = didClickItemHandle;
-}
-
-- (void)reloadWithSelectedIndex:(NSInteger)selectedIndex {
-    NSArray *subviews = self.scrollView.subviews;
+    NSArray *subviews = _subviews;
     NSInteger subviewsCount = subviews.count;
     NSInteger numberOfChildViewControllers = _configuration.numberOfChildViewControllers;
     if (subviewsCount < numberOfChildViewControllers) {
         for (NSInteger index = subviewsCount; index < numberOfChildViewControllers; index++) {
             CYScrollTitleItemView *titleItemView = [CYScrollTitleItemView new];
             [self.scrollView addSubview:titleItemView];
+            [_subviews addObject:titleItemView];
             titleItemView.userInteractionEnabled = true;
             UITapGestureRecognizer *tapGest = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestHandle:)];
             [titleItemView addGestureRecognizer:tapGest];
@@ -295,10 +297,15 @@
         }
     }
     for (NSInteger index = 0; index < numberOfChildViewControllers; index++) {
-        CYScrollTitleItemView *titleItemView = self.scrollView.subviews[index];
+        CYScrollTitleItemView *titleItemView = _subviews[index];
         CYScrollConfigurationItem *item = [_configuration itemAtIndex:index];
         titleItemView.item = item;
-        [titleItemView setupSelected:false];
+        if (index == _selectedIndex) {
+            titleItemView.selected = true;
+            self.selectedItemView = titleItemView;
+        } else {
+            titleItemView.selected = false;
+        }
     }
     if (_configuration.commonItem.showLine) {
         self.lineV.hidden = false;
@@ -307,19 +314,21 @@
         self.lineV.hidden = true;
     }
     _reloadLine = true;
+    [self toSelectedIndex:_selectedIndex];
     [self setNeedsLayout];
-    if (selectedIndex >= 0) {
-        [self toSelectedIndex:selectedIndex];
-    }
+}
+
+- (void)setupDidClickItemHandle:(CYScrollTitleDidClickItemHandle)didClickItemHandle {
+    _didClickItemHandle = didClickItemHandle;
 }
 
 - (void)tapGestHandle:(UITapGestureRecognizer *)tapGest {
     UIView *view = tapGest.view;
     if ([view isKindOfClass:[CYScrollTitleItemView class]]) {
         CYScrollTitleItemView *titleItemView = (CYScrollTitleItemView *)view;
-        if ([self.scrollView.subviews containsObject:titleItemView]) {
-            NSInteger index = [self.scrollView.subviews indexOfObject:titleItemView];
-            [self toSelectedIndex:index ];
+        if ([_subviews containsObject:titleItemView]) {
+            NSInteger index = [_subviews indexOfObject:titleItemView];
+            [self toSelectedIndex:index];
             !_didClickItemHandle ?: _didClickItemHandle(self, index);
         }
     }
@@ -328,33 +337,33 @@
 #pragma mark - CYScrollReloadRule
 
 - (void)reloadByRemoveItemAtIndex:(NSInteger)index; {
-    if (index >= self.scrollView.subviews.count) return;
+    if (index >= _subviews.count) return;
     if (_selectedIndex == index) {
         [self toSelectedIndex:0];
     }
-    UIView *subview = self.scrollView.subviews[index];
+    UIView *subview = _subviews[index];
     [subview removeFromSuperview];
     [self setNeedsLayout];
 }
 
 - (void)reloadByInsertItem:(CYScrollConfigurationItem *)item index:(NSInteger)index {
     if (!item) return;
-    if (index >= self.scrollView.subviews.count) return;
+    if (index >= _subviews.count) return;
     if (index <= _selectedIndex) {
         _selectedIndex += 1;
-        [self reloadWithSelectedIndex:_selectedIndex];
+        //        [self reloadWithSelectedIndex:_selectedIndex];
     }
 }
 
 - (void)reloadByExchangeItemIndexFrom:(NSInteger)from to:(NSInteger)to {
-    if (from >= self.scrollView.subviews.count) return;
-    if (to >= self.scrollView.subviews.count) return;
-    [self reloadWithSelectedIndex:_selectedIndex];
+    if (from >= _subviews.count) return;
+    if (to >= _subviews.count) return;
+    //    [self reloadWithSelectedIndex:_selectedIndex];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    CYScrollConfigurationCommonItem *common =  _configuration.commonItem;
+    CYScrollConfigurationCommonItem *common = _configuration.commonItem;
     CGFloat lineH = 0;
     CGFloat lineY = self.bounds.size.height;
     CGFloat lineX = 0;
@@ -363,13 +372,13 @@
         lineH = common.lineHeight;
         lineY = self.bounds.size.height - lineH - common.lineBottomMargin;
     }
-    self.scrollView.frame = CGRectMake(0, 0, self.bounds.size.width, lineY);
+    self.scrollView.frame = self.bounds;
     CGFloat titleItemViewX = 0;
     CGFloat titleItemViewY = 0;
     CGFloat titleItemViewW = 0;
     CGFloat titleItemViewH = 0;
-    for (NSInteger index = 0; index < self.scrollView.subviews.count; index++) {
-        UIView *subview = self.scrollView.subviews[index];
+    for (NSInteger index = 0; index < _subviews.count; index++) {
+        UIView *subview = _subviews[index];
         if ([subview isKindOfClass:[CYScrollTitleItemView class]]) {
             CYScrollTitleItemView *titleItemView = (CYScrollTitleItemView *)subview;
             CYScrollConfigurationItem *item = [_configuration itemAtIndex:index];
@@ -398,29 +407,12 @@
     self.scrollView.contentSize = CGSizeMake(titleItemViewX, self.scrollView.bounds.size.height);
 }
 
-- (void)setupComponentsWithColor:(UIColor *)color begin:(BOOL)begin {
-    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
-    unsigned char resultingPixel[4];
-    CGContextRef context = CGBitmapContextCreate(&resultingPixel, 1, 1, 8, 4, rgbColorSpace, 1);
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, CGRectMake(0, 0, 1, 1));
-    CGContextRelease(context);
-    CGColorSpaceRelease(rgbColorSpace);
-    for (int component = 0; component < 3; component++) {
-//        if (begin) {
-//            _colorComponents[component] = @(resultingPixel[component] / 255.0f);
-//        } else {
-//            _colorComponents[component + 3] = @(resultingPixel[component] / 255.0f);
-//        }
-    }
-}
-
 #pragma mark - Lazy Load
 
 - (UIView *)lineV {
     if (!_lineV) {
         UIView *lineV = [UIView new];
-        [self addSubview:lineV];
+        [self.scrollView addSubview:lineV];
         _lineV = lineV;
     }
     return _lineV;

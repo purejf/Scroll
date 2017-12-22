@@ -10,7 +10,7 @@
 
 @protocol CYScrollViewControllerDelegate, CYScrollViewControllerDataSource, CYScrollReloadRule;
 
-@class CYScrollViewController, CYScrollConfiguration, CYScrollConfigurationItem, CYScrollTitleView, CYScrollContentView;
+@class CYScrollViewController, CYScrollConfiguration, CYScrollConfigurationItem, CYScrollTitleView, CYScrollContentView, CYScrollConfigurationCommonItem;
 
 @interface CYScrollViewController : UIViewController
 
