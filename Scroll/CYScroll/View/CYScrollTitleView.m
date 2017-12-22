@@ -407,6 +407,8 @@
     self.scrollView.contentSize = CGSizeMake(titleItemViewX, self.scrollView.bounds.size.height);
 }
 
+
+
 #pragma mark - Lazy Load
 
 - (UIView *)lineV {
