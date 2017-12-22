@@ -23,7 +23,7 @@
     self = [super init];
     if (self) {
         _scrollDirection = CYScrollContentScrollDirectionHorizontal;
-        _titleViewHeight = 44.0;
+        _titleViewHeight = 40.0;
         _numberOfChildViewControllers = 0;
         _items = [NSMutableArray new];
     }
@@ -71,21 +71,22 @@
     if (self) {
         _titleTextColor = [UIColor blackColor];
         _titleTextFont = [UIFont systemFontOfSize:12];
-        _selectedTitleItemScale = 1.2;
+        _selectedTitleItemScale = 1.0;
         _selectedTitleTextColor = [UIColor redColor];
         _titleItemPadding = UIEdgeInsetsMake(5, 5, 5, 5);
         _titleItemLeftMargin = 5.0;
         _titleItemRightMargin = 5.0;
-        _titleItemBackgroundColor = [UIColor clearColor];
+        _titleItemBackgroundColor = [UIColor whiteColor];
         _selectedTitleItemBackgroundColor = [UIColor whiteColor];
         _titleItemLayerCornerRadius = 10.0;
         _showLine = true;
         _lineColor = [UIColor orangeColor];
-        _lineHeight = 8.0;
+        _lineHeight = 4.0;
         _lineBottomMargin = 2.0;
         _lineMoveWithAnimation = true;
         _lineMoveAnimationInterval = 0.3;
         _lineStretchingAnimation = true;
+        _titleItemWidthAccordingToContentSize = true;
     }
     return self;
 }
@@ -122,7 +123,6 @@
         if (title && titleTextFont) {
             NSDictionary *attributes = @{NSFontAttributeName: titleTextFont};
             _titleItemWidth = [title boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size.width;
-            _titleItemWidth += (self.commonItem.titleItemPadding.left + self.commonItem.titleItemPadding.right);
         }
     }
     return _titleItemWidth;
@@ -135,7 +135,6 @@
         if (title && titleTextFont) {
             NSDictionary *attributes = @{NSFontAttributeName: titleTextFont};
             _titleItemHeight = [title boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size.height;
-            _titleItemHeight += (self.commonItem.titleItemPadding.top + self.commonItem.titleItemPadding.bottom);
         }
     }
     return _titleItemHeight;

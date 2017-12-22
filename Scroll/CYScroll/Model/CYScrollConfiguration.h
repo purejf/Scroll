@@ -70,6 +70,8 @@
 
 @property (nonatomic, strong) UIColor *selectedTitleItemBackgroundColor;
 
+@property (nonatomic, assign) BOOL titleItemWidthAccordingToContentSize;
+
 @end
 
 @interface CYScrollConfigurationItem : NSObject

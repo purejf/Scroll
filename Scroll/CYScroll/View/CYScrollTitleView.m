@@ -114,41 +114,59 @@
     CYScrollTitleItemView *selectedItemView = self.scrollView.subviews[selectedIndex];
     CGFloat delta = contentViewOffset.x - contentViewWidth * selectedIndex;
     CGFloat division = delta / contentViewWidth;
-    CYScrollTitleItemView *nextView = self.scrollView.subviews[selectedIndex + 1];
+    CYScrollConfigurationItem *currentItem = [_configuration itemAtIndex:selectedIndex];
     CYScrollTitleItemView *currentView = selectedItemView;
+    CYScrollConfigurationItem *nextItem = [_configuration itemAtIndex:selectedIndex + 1];
+    CYScrollTitleItemView *nextView = self.scrollView.subviews[selectedIndex + 1];
     CGFloat maxLineW = (nextView.frame.origin.x + nextView.frame.size.width) - (currentView.frame.origin.x);
-    NSLog(@"delta = %f", delta);
-    NSLog(@"division = %f", division);
-    NSLog(@"maxLineW = %f", maxLineW);
+    if (_configuration.commonItem.titleItemWidthAccordingToContentSize) {
+        maxLineW -= (_configuration.commonItem.titleItemPadding.left + _configuration.commonItem.titleItemPadding.right);
+    }
     CGFloat lineW;
     CGFloat lineX;
-    if (division < 0.5) {
-        lineX = currentView.frame.origin.x;
+    if (division <= 0.5) {
         lineW = maxLineW * (division / 0.5);
-        if (lineW < currentView.frame.size.width) {
-            lineW = currentView.frame.size.width;
-        }
-    } else if (division == 0.5) {
         lineX = currentView.frame.origin.x;
-        lineW = maxLineW;
+        if (_configuration.commonItem.titleItemWidthAccordingToContentSize) {
+            if (lineW < currentItem.titleItemWidth) {
+                lineW = currentItem.titleItemWidth;
+            }
+            lineX += _configuration.commonItem.titleItemPadding.left;
+        } else {
+            if (lineW < currentView.frame.size.width) {
+                lineW = currentView.frame.size.width;
+            }
+        }
     } else {
         lineW = maxLineW * ((1 - division) / 0.5);
-        if (lineW < nextView.frame.size.width) {
-            lineW = nextView.frame.size.width;
+        if (_configuration.commonItem.titleItemWidthAccordingToContentSize) {
+            if (lineW < nextItem.titleItemWidth) {
+                lineW = nextItem.titleItemWidth;
+            }
+        } else {
+            if (lineW < nextView.frame.size.width) {
+                lineW = nextView.frame.size.width;
+            }
         }
-        lineX = maxLineW - lineW + currentView.frame.origin.x;
+        lineX = (nextView.frame.origin.x + nextView.frame.size.width) - lineW;
+        if (_configuration.commonItem.titleItemWidthAccordingToContentSize) {
+            lineX -= _configuration.commonItem.titleItemPadding.right;
+        }
     }
-    self.lineV.frame = CGRectMake(lineX, self.lineV.frame.origin.y, lineW, self.lineV.frame.size.height);
+    CGRect lineFrame = self.lineV.frame;
+    lineFrame.size.width = lineW;
+    lineFrame.origin.x = lineX;
+    self.lineV.frame = lineFrame;
 }
 
 - (void)scrollToContentViewOffset:(CGPoint)contentViewOffset contentViewWidth:(CGFloat)contentViewWidth {
     _reloadLine = false;
     [self lineStrectingAnimationWithContentViewOffset:contentViewOffset contentViewWidth:contentViewWidth];
     NSInteger selectedIndex = (contentViewOffset.x + self.scrollView.bounds.size.width / 2.0) / contentViewWidth;
-    [self clickAndScrollToSelectedIndex:selectedIndex];
+    [self toSelectedIndex:selectedIndex click:false];
 }
 
-- (void)clickAndScrollToSelectedIndex:(NSInteger)selectedIndex {
+- (void)toSelectedIndex:(NSInteger)selectedIndex click:(BOOL)click {
     if (_selectedIndex == selectedIndex) return;
     if (selectedIndex >= _configuration.numberOfChildViewControllers || selectedIndex >= self.scrollView.subviews.count) return;
     _selectedIndex = selectedIndex;
@@ -170,7 +188,8 @@
         offsetX = min;
     }
     [self.scrollView setContentOffset:CGPointMake(offsetX, 0) animated:true];
-    if (!_configuration.commonItem.lineStretchingAnimation && _configuration.commonItem.lineMoveWithAnimation && _configuration.commonItem.lineMoveAnimationInterval) {
+    if (click) {
+    if (_configuration.commonItem.lineMoveWithAnimation && _configuration.commonItem.lineMoveAnimationInterval) {
         [UIView animateWithDuration:_configuration.commonItem.lineMoveAnimationInterval animations:^{
             CGPoint lineCenter = self.lineV.center;
             lineCenter.x = selectedItemView.center.x;
@@ -181,8 +200,12 @@
         lineCenter.x = selectedItemView.center.x;
         self.lineV.center = lineCenter;
     }
+    }
 }
 
+- (void)toSelectedIndex:(NSInteger)selectedIndex {
+    [self toSelectedIndex:selectedIndex click:true];
+}
 
 - (void)setupConfiguration:(CYScrollConfiguration *)configuration {
     _configuration = configuration;
@@ -226,7 +249,7 @@
     _reloadLine = true;
     [self setNeedsLayout];
     if (selectedIndex >= 0) {
-        [self clickAndScrollToSelectedIndex:selectedIndex];
+        [self toSelectedIndex:selectedIndex];
     }
 }
 
@@ -236,7 +259,7 @@
         CYScrollTitleItemView *titleItemView = (CYScrollTitleItemView *)view;
         if ([self.scrollView.subviews containsObject:titleItemView]) {
             NSInteger index = [self.scrollView.subviews indexOfObject:titleItemView];
-            [self clickAndScrollToSelectedIndex:index ];
+            [self toSelectedIndex:index ];
             !_didClickItemHandle ?: _didClickItemHandle(self, index);
         }
     }
@@ -247,7 +270,7 @@
 - (void)reloadByRemoveItemAtIndex:(NSInteger)index; {
     if (index >= self.scrollView.subviews.count) return;
     if (_selectedIndex == index) {
-        [self clickAndScrollToSelectedIndex:0];
+        [self toSelectedIndex:0];
     }
     UIView *subview = self.scrollView.subviews[index];
     [subview removeFromSuperview];
@@ -291,15 +314,24 @@
             CYScrollTitleItemView *titleItemView = (CYScrollTitleItemView *)subview;
             CYScrollConfigurationItem *item = [_configuration itemAtIndex:index];
             titleItemViewW = item.titleItemWidth;
+            titleItemViewW += (common.titleItemPadding.left + common.titleItemPadding.right);
             titleItemViewX += _configuration.commonItem.titleItemLeftMargin;
             lineX = titleItemViewX;
             titleItemViewH = item.titleItemHeight;
+            titleItemViewH += (common.titleItemPadding.top + common.titleItemPadding.bottom);
             titleItemViewY = (lineY - titleItemViewH) / 2.0;
             titleItemView.frame = CGRectMake(titleItemViewX, titleItemViewY, titleItemViewW, titleItemViewH);
             titleItemViewX += (titleItemViewW + _configuration.commonItem.titleItemRightMargin);
-            lineW = titleItemViewW;
             if (index == _selectedIndex && _reloadLine) {
+                if (common.titleItemWidthAccordingToContentSize) {
+                    lineW = item.titleItemWidth;
+                } else {
+                    lineW = titleItemViewW;
+                }
                 self.lineV.frame = CGRectMake(lineX, lineY, lineW, lineH);
+                CGPoint lineCenter = self.lineV.center;
+                lineCenter.x = titleItemView.center.x;
+                self.lineV.center = lineCenter;
             }
         }
     }

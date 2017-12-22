@@ -39,16 +39,11 @@
             controller.view.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
         }
         item.childViewController = controller;
-//        item.selectedTitleItemScale = 1.5;
         [configuration initializeItem:item index:index];
     }
     CYScrollViewController *scroll = [CYScrollViewController scrollViewControllerWithConfiguration:configuration];
-    scroll.delegate = self;
-    scroll.dataSource = self;
-    
     scroll.view.backgroundColor = [UIColor lightGrayColor];
     [self.navigationController pushViewController:scroll animated:true];
 }
-
 
 @end
