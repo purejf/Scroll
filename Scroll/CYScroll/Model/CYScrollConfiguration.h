@@ -34,8 +34,6 @@
 
 @property (nonatomic, assign) BOOL scrollFill;
 
-@property (nonatomic, assign) BOOL gradient;
-
 @property (nonatomic, assign) bool showLine;
 
 @property (nonatomic, assign) bool lineStretchingAnimation;
