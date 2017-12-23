@@ -70,14 +70,14 @@
     self = [super init];
     if (self) {
         _titleTextColor = [UIColor whiteColor];
-        _titleTextFont = [UIFont systemFontOfSize:14];
+        _titleTextFont = [UIFont systemFontOfSize:12];
         _selectedTitleItemScale = 1.0;
         _selectedTitleTextColor = [UIColor redColor];
         _titleItemPadding = UIEdgeInsetsMake(5, 10, 5, 10);
         _titleItemLeftMargin = 0.0;
         _titleItemRightMargin = 0.0;
-        _titleItemBackgroundColor = [UIColor whiteColor];
-        _selectedTitleItemBackgroundColor = [UIColor whiteColor];
+        _titleItemBackgroundColor = [UIColor clearColor];
+        _selectedTitleItemBackgroundColor = [UIColor clearColor];
         _titleItemLayerCornerRadius = 10.0;
         _showLine = true;
         _lineColor = [UIColor redColor];

@@ -95,10 +95,16 @@
     } else {
         self.titleL.backgroundColor = [UIColor clearColor];
     }
-    CGFloat scale = selected ? self.item.commonItem.selectedTitleItemScale : 1.0;
+    CGFloat scale = self.item.commonItem.selectedTitleItemScale;
     [UIView animateWithDuration:0.3 animations:^{
-        self.titleL.transform = CGAffineTransformMakeScale(scale, scale);
+        if (selected) {
+            self.titleL.transform = CGAffineTransformScale(self.titleL.transform, scale, scale);
+        } else {
+            self.titleL.transform = CGAffineTransformIdentity;
+        }
+        NSLog(@"tx : %lf", self.titleL.transform.tx);
     }];
+    NSLog(@"%p", self.titleL);
 }
 
 - (void)layoutSubviews {
@@ -206,6 +212,11 @@
 
 - (void)_changeSelectedStatusWithSelectedIndex:(NSInteger)selectedIndex {
     CYScrollTitleItemView *selectedItemView = _subviews[selectedIndex];
+    
+    NSInteger preIndex = [_subviews indexOfObject:self.selectedItemView];
+    
+    NSLog(@"_changeSelectedStatusWithSelectedIndex %ld preIndex = %ld _selectedIndex = %ld", selectedIndex, preIndex, _selectedIndex);
+    
     self.selectedItemView.selected = false;
     selectedItemView.selected = true;
     self.selectedItemView = selectedItemView;
